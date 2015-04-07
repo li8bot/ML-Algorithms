@@ -15,7 +15,7 @@ class LinearRegression():
 
     def process(self):
         # Least squares polynomial fit
-        self.func = sp.poly1d(sp.polyfit(self.x, self.y, self.deegree, ))
+        self.func = sp.poly1d(sp.polyfit(self.x, self.y, self.deegree ))
         self.plot()
 
     def plot(self):
