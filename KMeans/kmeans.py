@@ -58,9 +58,9 @@ class KMeans():
 
 if __name__ == '__main__':
     sns.set(style="white")
-    # data = pd.read_csv('datasets/1.csv', header=None, sep=' ')
-    data = pd.read_csv('datasets/2.csv', header=None, sep=',')  # 7
-    # data = pd.read_csv('datasets/3.csv', header=None, sep=',')  # 15
+    # data = pd.read_csv('../datasets/1.csv', header=None, sep=' ')
+    data = pd.read_csv('../datasets/2.csv', header=None, sep=',')  # 7
+    # data = pd.read_csv('../datasets/3.csv', header=None, sep=',')  # 15
     clusters = 6
 
     data = data.as_matrix()
