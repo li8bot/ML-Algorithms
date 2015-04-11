@@ -19,10 +19,9 @@ class LinearRegression():
         # Sigmoid implementation from scipy
         self.sigmoid = expit
 
-
     def predict(self):
         theta_initial = np.zeros((1, self.n))
-        theta = fmin_bfgs(self.cost, theta_initial, args=(self.x, self.y))
+        theta = fmin_bfgs(self.cost, theta_initial, fprime=self.grad, args=(self.x, self.y))
 
         # Accuracy for training set
         predicted = map(lambda x: 1 if x >= 0.5 else 0, self.sigmoid(np.dot(self.x, theta)))
@@ -36,12 +35,11 @@ class LinearRegression():
         h = self.sigmoid(np.dot(x, theta))
         cost_pos = np.dot(-y.T, np.log(h))
         cost_neg = np.dot((1 - y).T, np.log(1 - h))
-        J = (cost_pos - cost_neg) / self.m
-        return J
+        return (cost_pos - cost_neg) / self.m
 
     def grad(self, theta, x, y):
         prediction = self.sigmoid(np.dot(x, theta))
-        return 1.0 / self.m * np.dot(np.transpose(x), prediction - y)
+        return 1.0 / self.m * np.dot(x.T, prediction - y)
 
 
 if __name__ == '__main__':
