@@ -9,10 +9,6 @@ class LinearRegression():
         self.x, self.y = data
         self.deegree = degree
 
-    def plot(self):
-        plt.scatter(df[0], df[1])
-        plt.show()
-
     def process(self):
         # Least squares polynomial fit
         self.func = sp.poly1d(sp.polyfit(self.x, self.y, self.deegree))
