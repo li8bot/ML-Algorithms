@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import scipy as sp
 import numpy as np
-from scipy.optimize import fmin_bfgs
+from scipy.optimize import fmin_bfgs, fmin_ncg
 from scipy.special import expit
 from sklearn.metrics import accuracy_score
 
@@ -22,10 +22,10 @@ class LinearRegression():
 
     def predict(self):
         theta_initial = np.zeros((1, self.n))
-        theta = fmin_bfgs(self.cost, theta_initial, fprime=self.grad, args=(self.x, self.y))
+        theta = fmin_bfgs(self.cost, theta_initial, args=(self.x, self.y))
 
         # Accuracy for training set
-        predicted = map(lambda x: 1 if x > 0.5 else 0, self.sigmoid(np.dot(self.x, theta)))
+        predicted = map(lambda x: 1 if x >= 0.5 else 0, self.sigmoid(np.dot(self.x, theta)))
         print accuracy_score(self.y, predicted)
 
     def plot(self):
@@ -33,9 +33,10 @@ class LinearRegression():
         plt.show()
 
     def cost(self, theta, x, y):
-        prediction = self.sigmoid(np.dot(x, theta))
-        J = (1. / self.m) * (
-            np.dot(np.transpose(np.log(prediction)), -y) - np.dot(np.transpose(np.log(1. - prediction)), (1.0 - y)))
+        h = self.sigmoid(np.dot(x, theta))
+        cost_pos = np.dot(-y.T, np.log(h))
+        cost_neg = np.dot((1 - y).T, np.log(1 - h))
+        J = (cost_pos - cost_neg) / self.m
         return J
 
     def grad(self, theta, x, y):
@@ -48,5 +49,5 @@ if __name__ == '__main__':
     df = df.dropna()
     model = LinearRegression(df=df)
     model.predict()
-    model.plot()
+    # model.plot()
 
