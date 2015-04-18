@@ -17,3 +17,6 @@ install:
 
 # command to run tests
 script: python runtests.py
+
+after_success:
+  - coveralls
