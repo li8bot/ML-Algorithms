@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import scipy as sp
 import numpy as np
+# from .func import *
+
 
 class LinearRegression():
     def __init__(self, data, degree=3):
