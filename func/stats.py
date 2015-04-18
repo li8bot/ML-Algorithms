@@ -1,4 +1,5 @@
 # coding:utf-8
+import math
 
 
 def check_data(data):
@@ -13,8 +14,8 @@ def check_data(data):
 
     return data
 
-# Central tendency (mean, median, mode)
 
+# Central tendency (mean, median, mode)
 def mode(data):
     data = check_data(data)
 
@@ -74,7 +75,15 @@ def variance(data, f=None, ddof=1):
     if len(data) < 2:
         return None
 
-    if not f:
+    if f is None:
         f = mean(data)
 
     return sum((f - x) ** 2 for x in data) / float(len(data) - ddof)
+
+
+# Standart deviation
+def stdev(data, f=None):
+    v = variance(data, f)
+    return math.sqrt(v)
+
+

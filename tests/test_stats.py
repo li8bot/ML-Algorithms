@@ -1,4 +1,5 @@
 # coding:utf-8
+import math
 from func import stats
 
 
@@ -45,6 +46,7 @@ def test_range():
     assert stats.range([1, 1]) == 0
 
 
+
 def test_variance():
     # Test ints
     assert stats.variance([9, 1, 1, 1, 0, 0, 4, 16]) == 32.571428571428569
@@ -54,3 +56,11 @@ def test_variance():
 
     assert stats.variance([1, 1]) == 0
     assert not stats.variance([0])
+
+
+def test_stdev():
+    # Test ints
+    assert stats.stdev([9, 1, 1, 1, 0, 0, 4, 16]) == math.sqrt(32.571428571428569)
+
+    # Test floats
+    assert stats.stdev([2.75, 1.75, 1.25, 0.25, 0.5, 1.25, 3.5]) == math.sqrt(1.3720238095238095)
