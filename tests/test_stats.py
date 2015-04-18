@@ -1,5 +1,6 @@
 # coding:utf-8
 import math
+import pytest
 from func import stats
 
 
@@ -11,10 +12,14 @@ def test_mode():
 
 def test_check_data():
     assert stats.check_data([1, 2, 3])
-    assert not stats.check_data([1, 2, 'b'])
-    assert not stats.check_data(object)
-    assert not stats.check_data([])
-    assert not stats.check_data(True)
+
+    with pytest.raises(ValueError):
+        stats.check_data([1, 2, 'b'])
+
+    with pytest.raises(TypeError):
+        stats.check_data(object)
+        stats.check_data([])
+        stats.check_data(True)
 
 
 def test_median():
@@ -44,7 +49,6 @@ def test_range():
     assert stats.range([3.2, 6.1, 9.1, 32.2, 71.1]) == 67.899999999999991
 
     assert stats.range([1, 1]) == 0
-
 
 
 def test_variance():

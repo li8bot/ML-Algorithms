@@ -1,16 +1,15 @@
 # coding:utf-8
 import math
 
-
 def check_data(data):
     if not isinstance(data, list):
-        try:
-            data = list(data)
-        except TypeError:
-            return False
+        data = list(data)
 
     if not all(isinstance(item, int) or isinstance(item, float) for item in data):
-        return False
+        raise ValueError('sequence can only contain integers or floats')
+
+    if len(data) == 0:
+        raise TypeError('function requires at least two data point')
 
     return data
 
@@ -18,13 +17,6 @@ def check_data(data):
 # Central tendency (mean, median, mode)
 def mode(data):
     data = check_data(data)
-
-    if not data:
-        return None
-
-    if len(data) == 0:
-        return None
-
     m = max([data.count(a) for a in data])
 
     if m > 1:
@@ -37,14 +29,7 @@ def mode(data):
 
 def median(data):
     data = check_data(data)
-
-    if not data:
-        return None
-
     data = sorted(data)
-
-    if len(data) == 0:
-        return None
 
     if len(data) % 2 == 1:
         return data[((len(data) + 1) / 2) - 1]
@@ -55,10 +40,6 @@ def median(data):
 
 def mean(data):
     data = check_data(data)
-
-    if not data:
-        return None
-
     return sum(data) / float(len(data))
 
 
