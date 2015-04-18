@@ -13,6 +13,7 @@ def check_data(data):
 
     return data
 
+# Central tendency (mean, median, mode)
 
 def mode(data):
     data = check_data(data)
@@ -57,4 +58,23 @@ def mean(data):
     if not data:
         return None
 
-    return sum(data)/len(data)
+    return sum(data) / float(len(data))
+
+
+def range(data):
+    return max(data) - min(data)
+
+
+def variance(data, f=None, ddof=1):
+    data = check_data(data)
+
+    if not data:
+        return None
+
+    if len(data) < 2:
+        return None
+
+    if not f:
+        f = mean(data)
+
+    return sum((f - x) ** 2 for x in data) / float(len(data) - ddof)
