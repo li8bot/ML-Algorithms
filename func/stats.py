@@ -1,6 +1,7 @@
 # coding:utf-8
 import math
 
+
 def check_data(data):
     if not isinstance(data, list):
         data = list(data)
@@ -50,9 +51,6 @@ def range(data):
 def variance(data, f=None, ddof=1):
     data = check_data(data)
 
-    if not data:
-        return None
-
     if len(data) < 2:
         return None
 
@@ -62,9 +60,14 @@ def variance(data, f=None, ddof=1):
     return sum((f - x) ** 2 for x in data) / float(len(data) - ddof)
 
 
-# Standart deviation
+# Standard deviation
 def stdev(data, f=None):
+    data = check_data(data)
     v = variance(data, f)
     return math.sqrt(v)
 
 
+# Standard error of the mean
+def standard_error(data, f=None):
+    data = check_data(data)
+    return stdev(data, f) / math.sqrt(len(data))
