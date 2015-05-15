@@ -1,5 +1,6 @@
 # coding:utf-8
 import math
+import operator
 
 
 def check_data(data):
@@ -15,7 +16,7 @@ def check_data(data):
     return data
 
 
-# Central tendency (mean, median, mode)
+
 def mode(data):
     data = check_data(data)
     m = max([data.count(a) for a in data])
@@ -43,6 +44,10 @@ def mean(data):
     data = check_data(data)
     return sum(data) / float(len(data))
 
+
+def gmean(data):
+    """ Geometric mean """
+    return (reduce(operator.mul, data)) ** (1.0/len(data))
 
 def range(data):
     return max(data) - min(data)
