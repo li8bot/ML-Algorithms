@@ -7,7 +7,8 @@ def check_data(data):
     if not isinstance(data, list):
         data = list(data)
 
-    if not all(isinstance(item, int) or isinstance(item, float) for item in data):
+    if not all(isinstance(item, int) or isinstance(item, float) for item in
+               data):
         raise ValueError('sequence can only contain integers or floats')
 
     if len(data) == 0:
@@ -16,6 +17,7 @@ def check_data(data):
     return data
 
 
+# Central tendency
 
 def mode(data):
     data = check_data(data)
@@ -47,7 +49,8 @@ def mean(data):
 
 def gmean(data):
     """ Geometric mean """
-    return (reduce(operator.mul, data)) ** (1.0/len(data))
+    return (reduce(operator.mul, data)) ** (1.0 / len(data))
+
 
 def range(data):
     return max(data) - min(data)

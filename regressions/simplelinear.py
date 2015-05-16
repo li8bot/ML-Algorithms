@@ -31,6 +31,6 @@ class LinearRegression():
 if __name__ == '__main__':
     df = pd.read_csv('../datasets/4.csv', header=None, sep=',')
     df = df.dropna()
-    model = LinearRegression(data=[list(df[0]), list(df[1])], degree=4)
+    model = LinearRegression(data=[list(df[0]), list(df[1])], degree=1)
     model.process()
 
