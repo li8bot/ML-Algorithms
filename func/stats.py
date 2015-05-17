@@ -1,4 +1,5 @@
 # coding:utf-8
+from __future__ import division
 import math
 import operator
 
@@ -36,10 +37,10 @@ def median(data):
     data = sorted(data)
 
     if len(data) % 2 == 1:
-        return data[((len(data) + 1) / 2) - 1]
+        return data[((len(data) + 1) // 2) - 1]
 
     if len(data) % 2 == 0:
-        return float(sum(data[(len(data) / 2) - 1:(len(data) / 2) + 1])) / 2.0
+        return float(sum(data[(len(data) // 2) - 1:(len(data) // 2) + 1])) / 2
 
 
 def mean(data):
@@ -50,6 +51,11 @@ def mean(data):
 def gmean(data):
     """ Geometric mean """
     return (reduce(operator.mul, data)) ** (1.0 / len(data))
+
+
+def hmean(data):
+    """ Harmonic mean """
+    return len(data) / sum([1. / x for x in data])
 
 
 def range(data):
@@ -79,3 +85,4 @@ def stdev(data, f=None):
 def standard_error(data, f=None):
     data = check_data(data)
     return stdev(data, f) / math.sqrt(len(data))
+
