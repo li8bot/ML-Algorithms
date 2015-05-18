@@ -13,7 +13,8 @@ class LinearRegression():
         if shuffle:
             df = df.reindex(np.random.permutation(df.index))
 
-        self.x, self.y = np.array(df[df.columns[0:-1]]), np.array(df.iloc[:, -1])
+        self.x, self.y = np.array(df[df.columns[0:-1]]), np.array(
+            df.iloc[:, -1])
         self.m, self.n = self.x.shape
 
         # Sigmoid implementation from scipy
@@ -21,10 +22,12 @@ class LinearRegression():
 
     def predict(self):
         theta_initial = np.zeros((1, self.n))
-        theta = fmin_bfgs(self.cost, theta_initial, fprime=self.grad, args=(self.x, self.y))
+        theta = fmin_bfgs(self.cost, theta_initial, fprime=self.grad,
+                          args=(self.x, self.y))
 
         # Accuracy for training set
-        predicted = map(lambda x: 1 if x >= 0.5 else 0, self.sigmoid(np.dot(self.x, theta)))
+        predicted = map(lambda x: 1 if x >= 0.5 else 0,
+                        self.sigmoid(np.dot(self.x, theta)))
         print accuracy_score(self.y, predicted)
 
     def plot(self):
@@ -48,4 +51,3 @@ if __name__ == '__main__':
     model = LinearRegression(df=df)
     model.predict()
     # model.plot()
-

@@ -9,7 +9,6 @@ import pandas as pd
 
 
 class KMeans():
-
     def __init__(self, clusters_count, iters, data):
         self.clusters_count = clusters_count
         self.iters = iters
@@ -18,7 +17,8 @@ class KMeans():
         self.dimension = len(data)
 
     def process(self):
-        centroids = [self.data[x] for x in random.sample(range(self.dimension), self.clusters_count)]
+        centroids = [self.data[x] for x in
+                     random.sample(range(self.dimension), self.clusters_count)]
 
         for point in self.data:
             index = random.randint(0, self.clusters_count) - 1
@@ -34,7 +34,8 @@ class KMeans():
                 closest = self.closest(point, centroids)
                 self.clusters[closest].append(point)
 
-                centroids = [self.centroid(cluster) for cluster in self.clusters]
+                centroids = [self.centroid(cluster) for cluster in
+                             self.clusters]
 
         self.centroids = centroids
         return self.clusters
@@ -69,10 +70,10 @@ if __name__ == '__main__':
 
     for i, points in enumerate(data):
         points = np.array(points).T
-        plt.scatter(points[0], points[1], c=sns.color_palette("hls", clusters)[i])
+        plt.scatter(points[0], points[1],
+                    c=sns.color_palette("hls", clusters)[i])
 
     for c in k.centroids:
         plt.scatter(c[0], c[1], marker='x', linewidths=10)
 
     plt.show()
-
