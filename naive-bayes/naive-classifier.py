@@ -13,33 +13,33 @@ class Naive:
     def __init__(self, X, y):
 
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X.values, y.values,
-                                                                                test_size=0.33
+                                                                                test_size=0.25
                                                                                 )
 
         self.classes = y.unique()
-        self.features = len(X.values[0])
+        self.features = X.shape[1]
         self.X_train = self.split_by_class(self.X_train, self.y_train)
 
     def predict(self):
         predictions = []
         for v in self.X_test:
-            cprobs = {}
+            class_probabilities = {}
             for i in self.classes:
-                fprobs = [self.normpdf(v[j],
-                                       self.predictors[i][j][0],
-                                       self.predictors[i][j][1]) for j in range(self.features)]
-                prob = reduce(lambda x, y: x * y, fprobs)
-                cprobs[i] = prob
-            cls = max(cprobs.items(), key=operator.itemgetter(1))[0]
+                prob = sum([math.log(self.normpdf(v[j],
+                                                  self.summaries[i][j][0],
+                                                  self.summaries[i][j][1]))
+                            for j in range(self.features)])
+                class_probabilities[i] = prob
+            cls = max(class_probabilities.items(), key=operator.itemgetter(1))[0]
             predictions.append(cls)
         self.predictions = predictions
 
     def train(self):
-        self.predictors = {}
+        self.summaries = {}
         for i in self.classes:
-            self.predictors[i] = {}
+            self.summaries[i] = {}
             for j in range(self.features):
-                self.predictors[i][j] = self.mean_std(self.X_train[i][:, j])
+                self.summaries[i][j] = self.mean_std(self.X_train[i][:, j])
 
     def mean_std(self, x):
         return np.mean(x), np.std(x)
@@ -57,12 +57,13 @@ class Naive:
         return splits
 
     def validate(self):
-        print(accuracy_score(self.y_test,self.predictions))
+        print(accuracy_score(self.y_test, self.predictions))
 
     def process(self):
         self.train()
         self.predict()
         self.validate()
+
 
 if __name__ == '__main__':
     df = pd.read_csv('../datasets/pima-indians.csv')
@@ -72,4 +73,3 @@ if __name__ == '__main__':
     for i in range(10):
         n = Naive(X, y)
         n.process()
-
