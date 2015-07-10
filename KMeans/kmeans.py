@@ -12,7 +12,7 @@ class KMeans():
     def __init__(self, clusters_count, iters, data):
         self.clusters_count = clusters_count
         self.iters = iters
-        self.clusters = [[] for _ in xrange(clusters_count)]
+        self.clusters = [[] for _ in range(clusters_count)]
         self.data = [tuple(d) for d in data]
         self.dimension = len(data)
 
@@ -24,7 +24,7 @@ class KMeans():
             index = random.randint(0, self.clusters_count) - 1
             self.clusters[index].append(point)
 
-        for _ in xrange(self.iters):
+        for _ in range(self.iters):
             for point in self.data:
 
                 for i, cluster in enumerate(self.clusters):

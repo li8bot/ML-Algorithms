@@ -1,5 +1,6 @@
 # coding:utf-8
 from __future__ import division
+from functools import reduce
 import math
 import operator
 

@@ -28,7 +28,7 @@ class LinearRegression():
         # Accuracy for training set
         predicted = map(lambda x: 1 if x >= 0.5 else 0,
                         self.sigmoid(np.dot(self.x, theta)))
-        print accuracy_score(self.y, predicted)
+        print(accuracy_score(self.y, predicted))
 
     def plot(self):
         plt.plot(self.x, self.y, 'o')
