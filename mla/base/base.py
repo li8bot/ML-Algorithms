@@ -10,8 +10,8 @@ class InputError(Exception):
 
 class Base:
     def __init__(self):
-        self.y_required = False
 
+        self.y_required = False
         self.X = None
         self.y = None
 

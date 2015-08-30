@@ -17,6 +17,6 @@ def run_example():
 
 
 if __name__ == '__main__':
-    # print(timeit.timeit(run_example, number=1))
+    print(timeit.timeit(run_example, number=1))
     k = run_example()
     k.plot()
