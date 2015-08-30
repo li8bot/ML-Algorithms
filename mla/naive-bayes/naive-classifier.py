@@ -1,4 +1,5 @@
-# coding: utf-8
+# Author: rushter <me@rushter.com>
+
 from functools import reduce
 import math
 import operator

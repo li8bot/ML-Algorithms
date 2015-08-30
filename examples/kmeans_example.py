@@ -1,4 +1,5 @@
-# coding: utf-8
+# Author: rushter <me@rushter.com>
+
 from mla.kmeans import KMeans
 import pandas as pd
 import timeit

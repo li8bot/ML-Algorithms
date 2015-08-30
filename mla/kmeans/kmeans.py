@@ -1,4 +1,3 @@
-# coding: utf-8
 # Author: rushter <me@rushter.com>
 
 import random
@@ -67,10 +66,12 @@ class KMeans(Base):
         return closest_index
 
     def _get_centroid(self, cluster):
-        # Get values by indices and take the mean
-        return [np.mean(np.take(self.X[:, 0], cluster)),
-                np.mean(np.take(self.X[:, 1], cluster))
-                ]
+        """ Get values by indices and take the mean """
+
+        return [
+            np.mean(np.take(self.X[:, 0], cluster)),
+            np.mean(np.take(self.X[:, 1], cluster))
+        ]
 
     def _dist_from_centers(self):
         return np.array([min([np.linalg.norm(x - c) ** 2 for c in self.centroids]) for x in self.X])

@@ -1,4 +1,5 @@
-# coding:utf-8
+# Author: rushter <me@rushter.com>
+
 from __future__ import division
 from functools import reduce
 import math

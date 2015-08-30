@@ -1,4 +1,5 @@
-# coding:utf-8
+# Author: rushter <me@rushter.com>
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import scipy as sp
