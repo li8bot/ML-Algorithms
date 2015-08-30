@@ -10,8 +10,9 @@ def run_example():
     # data = pd.read_csv('../datasets/3.csv', header=None, sep=',')  # 15
     clusters = 5
     data = data.as_matrix()
-    k = KMeans(K=clusters, max_iters=50, X=data, init='++')
-    k.train()
+    k = KMeans(K=clusters, max_iters=50, init='++')
+    k.fit(data)
+    k.predict()
     return k
 
 
