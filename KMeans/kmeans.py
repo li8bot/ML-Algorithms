@@ -10,70 +10,84 @@ import time
 
 
 class KMeans:
-    def __init__(self, clusters_count, iters, data):
-        self.clusters_count = clusters_count
+    def __init__(self, K, iters, X, init='random'):
+        self.K = K
+        self.X = X
         self.iters = iters
-        self.data = data
-        self.dimension = len(data)
-        self.clusters = [[] for _ in range(clusters_count)]
+        self.samples_count, self.features_count = X.shape
+        self.clusters = [[] for _ in range(self.K)]
+
+        self._initialize_cetroids(init=init)
+
+    def _dist_from_centers(self):
+        self.D2 = np.array([min([np.linalg.norm(x - c) ** 2
+                                 for c in self.centroids])
+                            for x in self.X])
+
+    def _choose_next_center(self):
+        probs = self.D2 / self.D2.sum()
+        cumprobs = probs.cumsum()
+        r = random.random()
+        ind = np.where(cumprobs >= r)[0][0]
+        return self.X[ind]
+
+    def _initialize_cetroids(self, init):
+        # Seed the initial centroids
+
+        if init == 'random':
+            self.centroids = [self.X[x] for x in
+                              random.sample(range(self.samples_count), self.K)]
+        elif init == '++':
+            self.centroids = [random.choice(self.X)]
+            while len(self.centroids) < self.K:
+                self._dist_from_centers()
+                self.centroids.append(self._choose_next_center())
 
     def train(self):
-
-        # Initialize centroids randomly
-        centroids = [self.data[x] for x in
-                     random.sample(range(self.dimension), self.clusters_count)]
-
-        # Assign labels to the clusters randomly
-        for point in range(len(self.data)):
-            index = random.randint(0, self.clusters_count) - 1
-            self.clusters[index].append(point)
-
+        centroids = self.centroids
         for _ in range(self.iters):
-            centroids = self.classify(centroids)
+            self._assign(centroids)
+            centroids = [self._centroid(cluster) for cluster in self.clusters]
 
         self.centroids = centroids
-        return self.clusters
 
-    def classify(self, centroids):
+    def _assign(self, centroids):
 
-        for row in range(len(self.data)):
+        for row in range(self.samples_count):
             for i, cluster in enumerate(self.clusters):
                 if row in cluster:
                     self.clusters[i].remove(row)
+                    break
 
-            closest = self.closest(row, centroids)
+            closest = self._closest(row, centroids)
             self.clusters[closest].append(row)
 
-        centroids = [self.centroid(cluster) for cluster in
-                     self.clusters]
-        return centroids
-
-    def closest(self, fpoint, centroids):
+    def _closest(self, fpoint, centroids):
         closest_index = None
         closest_distance = None
         for i, point in enumerate(centroids):
-            dist = self.distance(self.data[fpoint], point)
+            dist = self._distance(self.X[fpoint], point)
             if closest_index is None or dist < closest_distance:
                 closest_index = i
                 closest_distance = dist
         return closest_index
 
-    def centroid(self, cluster):
-        # Get values by indexes and take the mean
-        return [np.average(np.take(self.data[:, 0], cluster)),
-                np.average(np.take(self.data[:, 1], cluster))
+    def _centroid(self, cluster):
+        # Get values by indices and take the mean
+        return [np.mean(np.take(self.X[:, 0], cluster)),
+                np.mean(np.take(self.X[:, 1], cluster))
                 ]
 
     @staticmethod
-    def distance(a, b):
+    def _distance(a, b):
         return math.sqrt(sum((a - b) ** 2))
 
     def plot(self):
         sns.set(style="white")
         for i, index in enumerate(self.clusters):
-            points = np.array(self.data[index]).T
+            points = np.array(self.X[index]).T
             plt.scatter(points[0], points[1],
-                        c=sns.color_palette("hls", self.clusters_count + 1)[i])
+                        c=sns.color_palette("hls", self.K + 1)[i])
 
         for c in self.centroids:
             plt.scatter(c[0], c[1], marker='x', linewidths=10)
@@ -88,7 +102,7 @@ if __name__ == '__main__':
     clusters = 5
     data = data.as_matrix()
     start = time.time()
-    k = KMeans(clusters_count=clusters, iters=50, data=data)
+    k = KMeans(K=clusters, iters=50, X=data, init='++')
     k.train()
     print(time.time() - start)
     k.plot()
