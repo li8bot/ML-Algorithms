@@ -9,14 +9,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import time
-
+from mla.base import Base
 
 # TODO: automatic convergence
 
-class KMeans:
-    def __init__(self, K, max_iters, X, init='random'):
+class KMeans(Base):
+    def __init__(self, K, max_iters, init='random'):
+        super(Base, self).__init__()
         self.K = K
-        self.X = X
         self.max_iters = max_iters
         self.samples_count, self.features_count = X.shape
         self.clusters = [[] for _ in range(self.K)]
@@ -45,7 +45,7 @@ class KMeans:
             while len(self.centroids) < self.K:
                 self.centroids.append(self._choose_next_center())
 
-    def train(self):
+    def predict(self):
         centroids = self.centroids
 
         for _ in range(self.max_iters):
