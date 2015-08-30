@@ -1,4 +1,6 @@
-# coding:utf-8
+# coding: utf-8
+# Author: rushter <me@rushter.com>
+
 import random
 import math
 import numpy as np
@@ -12,7 +14,6 @@ import time
 # TODO: automatic convergence
 
 class KMeans:
-
     def __init__(self, K, max_iters, X, init='random'):
         self.K = K
         self.X = X
@@ -49,7 +50,11 @@ class KMeans:
 
         for _ in range(self.max_iters):
             self._assign(centroids)
+            centroids_old = centroids
             centroids = [self._get_centroid(cluster) for cluster in self.clusters]
+
+            if self._check_convergence(centroids_old, centroids) == 0:
+                break
 
         self.centroids = centroids
 
@@ -82,10 +87,14 @@ class KMeans:
 
     @staticmethod
     def _distance(a, b):
+        if isinstance(a, list) and isinstance(b, list):
+            a = np.array(a)
+            b = np.array(b)
+
         return math.sqrt(sum((a - b) ** 2))
 
-    def _check_convergence(self):
-        pass
+    def _check_convergence(self, centroids_old, centroids):
+        return sum([self._distance(centroids_old[i], centroids[i]) for i in range(self.K)])
 
     def plot(self):
         sns.set(style="white")
@@ -98,16 +107,3 @@ class KMeans:
             plt.scatter(c[0], c[1], marker='x', linewidths=10)
 
         plt.show()
-
-
-if __name__ == '__main__':
-    # data = pd.read_csv('../datasets/1.csv', header=None, sep=' ')
-    data = pd.read_csv('../datasets/2.csv', header=None, sep=',')  # 7
-    # data = pd.read_csv('../datasets/3.csv', header=None, sep=',')  # 15
-    clusters = 5
-    data = data.as_matrix()
-    start = time.time()
-    k = KMeans(K=clusters, max_iters=50, X=data, init='++')
-    k.train()
-    print(time.time() - start)
-    k.plot()
