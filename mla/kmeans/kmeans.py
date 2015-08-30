@@ -3,49 +3,36 @@
 
 import random
 import math
-import numpy as np
 
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import pandas as pd
-import time
+
 from mla.base import Base
 
-# TODO: automatic convergence
 
 class KMeans(Base):
     def __init__(self, K, max_iters, init='random'):
-        super(Base, self).__init__()
+        super(KMeans, self).__init__()
         self.K = K
         self.max_iters = max_iters
-        self.samples_count, self.features_count = self.X.shape
         self.clusters = [[] for _ in range(self.K)]
         self.centroids = []
-        self._initialize_cetroids(init=init)
-
-    def _dist_from_centers(self):
-        return np.array([min([np.linalg.norm(x - c) ** 2 for c in self.centroids]) for x in self.X])
-
-    def _choose_next_center(self):
-        d2 = self._dist_from_centers()
-        probs = d2 / d2.sum()
-        cumprobs = probs.cumsum()
-        r = random.random()
-        ind = np.where(cumprobs >= r)[0][0]
-        return self.X[ind]
+        self.init = init
 
     def _initialize_cetroids(self, init):
-        # Seed the initial centroids
+        """ Seed the initial centroids """
 
         if init == 'random':
             self.centroids = [self.X[x] for x in
-                              random.sample(range(self.samples_count), self.K)]
+                              random.sample(range(self.n_samples), self.K)]
         elif init == '++':
             self.centroids = [random.choice(self.X)]
             while len(self.centroids) < self.K:
                 self.centroids.append(self._choose_next_center())
 
     def predict(self):
+        self._initialize_cetroids(self.init)
         centroids = self.centroids
 
         for _ in range(self.max_iters):
@@ -60,7 +47,7 @@ class KMeans(Base):
 
     def _assign(self, centroids):
 
-        for row in range(self.samples_count):
+        for row in range(self.n_samples):
             for i, cluster in enumerate(self.clusters):
                 if row in cluster:
                     self.clusters[i].remove(row)
@@ -84,6 +71,17 @@ class KMeans(Base):
         return [np.mean(np.take(self.X[:, 0], cluster)),
                 np.mean(np.take(self.X[:, 1], cluster))
                 ]
+
+    def _dist_from_centers(self):
+        return np.array([min([np.linalg.norm(x - c) ** 2 for c in self.centroids]) for x in self.X])
+
+    def _choose_next_center(self):
+        d2 = self._dist_from_centers()
+        probs = d2 / d2.sum()
+        cumprobs = probs.cumsum()
+        r = random.random()
+        ind = np.where(cumprobs >= r)[0][0]
+        return self.X[ind]
 
     @staticmethod
     def _distance(a, b):
