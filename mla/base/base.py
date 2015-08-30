@@ -1,13 +1,9 @@
 # Author: rushter <me@rushter.com>
 
 import numpy as np
+from mla.error import InputError
 
-
-class InputError(Exception):
-    pass
-
-
-class Base:
+class Base(object):
     def __init__(self):
 
         self.y_required = False
