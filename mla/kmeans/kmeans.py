@@ -18,7 +18,7 @@ class KMeans(Base):
         super(Base, self).__init__()
         self.K = K
         self.max_iters = max_iters
-        self.samples_count, self.features_count = X.shape
+        self.samples_count, self.features_count = self.X.shape
         self.clusters = [[] for _ in range(self.K)]
         self.centroids = []
         self._initialize_cetroids(init=init)
