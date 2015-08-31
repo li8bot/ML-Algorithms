@@ -1,7 +1,6 @@
 # Author: rushter <me@rushter.com>
 
 import numpy as np
-from mla.error import InputError
 
 class Base(object):
     def __init__(self):
@@ -15,10 +14,10 @@ class Base(object):
             X = np.array(X)
 
         if X.size == 0:
-            raise InputError('Number of features must be > 0')
+            raise ValueError('Number of features must be > 0')
 
         if len(X.shape) > 2:
-            raise InputError('Array of features must be 1d or 2d array')
+            raise ValueError('Array of features must be 1d or 2d array')
 
         if len(X.shape) == 1:
             self.n_samples, self.n_features = 1, X.shape
@@ -29,15 +28,15 @@ class Base(object):
 
         if self.y_required:
             if y is None:
-                raise InputError('Missed required argument y')
+                raise ValueError('Missed required argument y')
 
             if not isinstance(y, np.ndarray):
                 y = np.array(y)
 
             if len(y.shape) != 1:
-                raise InputError('Labels must be 1d array')
+                raise ValueError('Labels must be 1d array')
 
             if y.size == 0:
-                raise InputError('Number of features must be > 0')
+                raise ValueError('Number of features must be > 0')
 
         self.y = y

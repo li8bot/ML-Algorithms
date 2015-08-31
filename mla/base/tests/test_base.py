@@ -2,8 +2,7 @@
 
 import pytest
 import numpy as np
-from mla.base import Base, InputError
-
+from mla.base import Base
 
 def test_fit():
     b = Base()
@@ -12,21 +11,21 @@ def test_fit():
     b.fit([1])
 
     # For X
-    with pytest.raises(InputError):
+    with pytest.raises(ValueError):
         b.fit([], [1])
 
-    with pytest.raises(InputError):
+    with pytest.raises(ValueError):
         X = np.ndarray(shape=(2, 2, 2), dtype=float, order='F')
         b.fit(X)
 
     # For y
     b.y_required = True
 
-    with pytest.raises(InputError):
+    with pytest.raises(ValueError):
         b.fit([[1], [1]], [[1], [1]])
 
-    with pytest.raises(InputError):
+    with pytest.raises(ValueError):
         b.fit([1], [])
 
-    with pytest.raises(InputError):
+    with pytest.raises(ValueError):
         b.fit([1], )
