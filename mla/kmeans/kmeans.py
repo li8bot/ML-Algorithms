@@ -1,17 +1,17 @@
 # Author: rushter <me@rushter.com>
 
 import random
-import math
 
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 from mla.base import Base
+from mla.metrics.distance import euclidean_distance
 
 
 class KMeans(Base):
-    def __init__(self, K, max_iters, init='random'):
+    def __init__(self, K=5, max_iters=100, init='random'):
         super(KMeans, self).__init__()
         self.K = K
         self.max_iters = max_iters
@@ -29,6 +29,9 @@ class KMeans(Base):
             self.centroids = [random.choice(self.X)]
             while len(self.centroids) < self.K:
                 self.centroids.append(self._choose_next_center())
+
+        else:
+            raise ValueError('Unknown type of init parameter')
 
     def predict(self):
         self._initialize_cetroids(self.init)
@@ -59,7 +62,7 @@ class KMeans(Base):
         closest_index = None
         closest_distance = None
         for i, point in enumerate(centroids):
-            dist = self._distance(self.X[fpoint], point)
+            dist = euclidean_distance(self.X[fpoint], point)
             if closest_index is None or dist < closest_distance:
                 closest_index = i
                 closest_distance = dist
@@ -74,7 +77,7 @@ class KMeans(Base):
         ]
 
     def _dist_from_centers(self):
-        return np.array([min([np.linalg.norm(x - c) ** 2 for c in self.centroids]) for x in self.X])
+        return np.array([min([euclidean_distance(x, c) for c in self.centroids]) for x in self.X])
 
     def _choose_next_center(self):
         d2 = self._dist_from_centers()
@@ -84,16 +87,8 @@ class KMeans(Base):
         ind = np.where(cumprobs >= r)[0][0]
         return self.X[ind]
 
-    @staticmethod
-    def _distance(a, b):
-        if isinstance(a, list) and isinstance(b, list):
-            a = np.array(a)
-            b = np.array(b)
-
-        return math.sqrt(sum((a - b) ** 2))
-
     def _check_convergence(self, centroids_old, centroids):
-        return sum([self._distance(centroids_old[i], centroids[i]) for i in range(self.K)])
+        return sum([euclidean_distance(centroids_old[i], centroids[i]) for i in range(self.K)])
 
     def plot(self):
         sns.set(style="white")
@@ -102,7 +97,7 @@ class KMeans(Base):
             plt.scatter(points[0], points[1],
                         c=sns.color_palette("hls", self.K + 1)[i])
 
-        for c in self.centroids:
-            plt.scatter(c[0], c[1], marker='x', linewidths=10)
+        for point in self.centroids:
+            plt.scatter(*point, marker='x', linewidths=10)
 
         plt.show()
