@@ -3,4 +3,5 @@
 class InputError(Exception):
     pass
 
-
+class UnknownMethod(Exception):
+    pass
