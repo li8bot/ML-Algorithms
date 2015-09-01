@@ -10,6 +10,7 @@ from mla.base import Base
 from mla.metrics.distance import euclidean_distance
 
 
+
 class KMeans(Base):
     def __init__(self, K=5, max_iters=100, init='random'):
         super(KMeans, self).__init__()
@@ -80,8 +81,8 @@ class KMeans(Base):
         return np.array([min([euclidean_distance(x, c) for c in self.centroids]) for x in self.X])
 
     def _choose_next_center(self):
-        d2 = self._dist_from_centers()
-        probs = d2 / d2.sum()
+        distances = self._dist_from_centers()
+        probs = distances / distances.sum()
         cumprobs = probs.cumsum()
         r = random.random()
         ind = np.where(cumprobs >= r)[0][0]
@@ -93,9 +94,8 @@ class KMeans(Base):
     def plot(self):
         sns.set(style="white")
         for i, index in enumerate(self.clusters):
-            points = np.array(self.X[index]).T
-            plt.scatter(points[0], points[1],
-                        c=sns.color_palette("hls", self.K + 1)[i])
+            point = np.array(self.X[index]).T
+            plt.scatter(*point, c=sns.color_palette("hls", self.K + 1)[i])
 
         for point in self.centroids:
             plt.scatter(*point, marker='x', linewidths=10)
