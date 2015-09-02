@@ -56,7 +56,7 @@ def logloss(actual, predicted):
     epsilon = 1e-15
 
     pred = np.array([max(epsilon, pred) for pred in predicted])
-    pred = np.array([min(1 - epsilon, pred) for pred in predicted])
+    pred = np.array([min(1 - epsilon, pred) for pred in pred])
 
     ll = sum(actual * np.log(pred) + (1-actual) * np.log(1-pred))
     ll = ll * -1.0 / len(actual)
