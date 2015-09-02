@@ -22,3 +22,5 @@ script: coverage run runtests.py
 
 after_success:
   - coveralls
+
+sudo: false
