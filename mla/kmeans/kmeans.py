@@ -3,12 +3,10 @@
 import random
 
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
+
 
 from mla.base import Base
 from mla.metrics.distance import euclidean_distance
-
 
 
 class KMeans(Base):
@@ -37,7 +35,6 @@ class KMeans(Base):
     def predict(self):
         self._initialize_cetroids(self.init)
         centroids = self.centroids
-
         for _ in range(self.max_iters):
             self._assign(centroids)
             centroids_old = centroids
@@ -47,6 +44,16 @@ class KMeans(Base):
                 break
 
         self.centroids = centroids
+
+        return self._get_predictions()
+
+    def _get_predictions(self):
+        predictions = np.empty(self.n_samples)
+
+        for i, cluster in enumerate(self.clusters):
+            for index in cluster:
+                predictions[index] = i
+        return predictions
 
     def _assign(self, centroids):
 
@@ -72,10 +79,7 @@ class KMeans(Base):
     def _get_centroid(self, cluster):
         """ Get values by indices and take the mean """
 
-        return [
-            np.mean(np.take(self.X[:, 0], cluster)),
-            np.mean(np.take(self.X[:, 1], cluster))
-        ]
+        return [np.mean(np.take(self.X[:, i], cluster)) for i in range(self.n_features)]
 
     def _dist_from_centers(self):
         return np.array([min([euclidean_distance(x, c) for c in self.centroids]) for x in self.X])
@@ -91,13 +95,3 @@ class KMeans(Base):
     def _check_convergence(self, centroids_old, centroids):
         return sum([euclidean_distance(centroids_old[i], centroids[i]) for i in range(self.K)])
 
-    def plot(self):
-        sns.set(style="white")
-        for i, index in enumerate(self.clusters):
-            point = np.array(self.X[index]).T
-            plt.scatter(*point, c=sns.color_palette("hls", self.K + 1)[i])
-
-        for point in self.centroids:
-            plt.scatter(*point, marker='x', linewidths=10)
-
-        plt.show()
