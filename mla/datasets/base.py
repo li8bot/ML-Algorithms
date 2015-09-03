@@ -20,3 +20,10 @@ def load_iris():
 def load_robust():
     df = pd.read_csv(get_filename('data/robust.csv'))
     return df.values, None
+
+
+def load_boston():
+    df = pd.read_csv(get_filename('data/boston.csv'))
+    y = df['medv']
+    df.drop(['medv', 'id'], axis=1, inplace=type)
+    return df, y
