@@ -1,9 +1,10 @@
 # Author: rushter <me@rushter.com>
 
 import random
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 import numpy as np
-
 
 from mla.base import Base
 from mla.metrics.distance import euclidean_distance
@@ -95,3 +96,24 @@ class KMeans(Base):
     def _check_convergence(self, centroids_old, centroids):
         return sum([euclidean_distance(centroids_old[i], centroids[i]) for i in range(self.K)])
 
+    def plot(self, data=None):
+        sns.set(style="white")
+
+        if data is None:
+            data = self.X
+
+        if len(data[0]) > 2:
+            # TODO: Implement TSNE
+            from sklearn.manifold import TSNE
+
+            decomposition = TSNE(n_components=2)
+            data = decomposition.fit_transform(self.X)
+
+        for i, index in enumerate(self.clusters):
+            point = np.array(data[index]).T
+            plt.scatter(*point, c=sns.color_palette("hls", self.K + 1)[i])
+
+        for point in self.centroids:
+            plt.scatter(*point, marker='x', linewidths=10)
+
+        plt.show()
