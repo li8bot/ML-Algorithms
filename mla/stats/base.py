@@ -5,17 +5,16 @@ from functools import reduce
 import math
 import operator
 
-
 def check_data(data):
     if not isinstance(data, list):
         data = list(data)
 
     if not all(isinstance(item, int) or isinstance(item, float) for item in
                data):
-        raise ValueError('sequence can only contain integers or floats')
+        raise ValueError('Sequence can only contain integers or floats')
 
     if len(data) == 0:
-        raise TypeError('function requires at least two data point')
+        raise TypeError('Function requires at least two data point')
 
     return data
 
@@ -60,7 +59,7 @@ def hmean(data):
     return len(data) / sum([1. / x for x in data])
 
 
-def range(data):
+def arange(data):
     return max(data) - min(data)
 
 
@@ -87,4 +86,5 @@ def stdev(data, f=None):
 def standard_error(data, f=None):
     data = check_data(data)
     return stdev(data, f) / math.sqrt(len(data))
+
 
