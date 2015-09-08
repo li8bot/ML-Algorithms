@@ -26,4 +26,10 @@ def load_boston():
     df = pd.read_csv(get_filename('data/boston.csv'))
     y = df['medv']
     df.drop(['medv', 'id'], axis=1, inplace=type)
-    return df, y
+    return df.values, y.values
+
+def load_lin():
+    df = pd.read_csv(get_filename('data/lin.csv'))
+    y = df['y']
+    df.drop(['y'], axis=1, inplace=type)
+    return df.values, y.values
