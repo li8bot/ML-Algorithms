@@ -1,9 +1,12 @@
 # Author: rushter <me@rushter.com>
+import math
 
 from mla.base import Base
 from mla.metrics.scoring import squared_error
 import numpy as np
 import logging
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 class LinearRegression(Base):
@@ -112,3 +115,10 @@ class LinearRegression(Base):
             errors = (prediction - y) * temp
             theta[it] -= alpha * (2 / m) * errors.sum()
         return theta
+
+    def plot(self):
+        sns.set(style="white")
+        plt.plot([math.log(x) for x in self.errors])
+        plt.ylabel('Error rate')
+        plt.xlabel('Iteration')
+        plt.show()
