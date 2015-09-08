@@ -12,7 +12,6 @@ from mla.metrics.distance import euclidean_distance
 
 class KMeans(Base):
     def __init__(self, K=5, max_iters=100, init='random'):
-        super(KMeans, self).__init__()
         self.K = K
         self.max_iters = max_iters
         self.clusters = [[] for _ in range(self.K)]
@@ -29,7 +28,6 @@ class KMeans(Base):
             self.centroids = [random.choice(self.X)]
             while len(self.centroids) < self.K:
                 self.centroids.append(self._choose_next_center())
-
         else:
             raise ValueError('Unknown type of init parameter')
 
@@ -41,7 +39,7 @@ class KMeans(Base):
             centroids_old = centroids
             centroids = [self._get_centroid(cluster) for cluster in self.clusters]
 
-            if self._check_convergence(centroids_old, centroids) == 0:
+            if self._is_converged(centroids_old, centroids):
                 break
 
         self.centroids = centroids
@@ -93,8 +91,8 @@ class KMeans(Base):
         ind = np.where(cumprobs >= r)[0][0]
         return self.X[ind]
 
-    def _check_convergence(self, centroids_old, centroids):
-        return sum([euclidean_distance(centroids_old[i], centroids[i]) for i in range(self.K)])
+    def _is_converged(self, centroids_old, centroids):
+        return True if sum([euclidean_distance(centroids_old[i], centroids[i]) for i in range(self.K)]) == 0 else False
 
     def plot(self, data=None):
         sns.set(style="white")

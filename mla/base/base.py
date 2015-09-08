@@ -2,12 +2,11 @@
 
 import numpy as np
 
-class Base(object):
-    def __init__(self):
 
-        self.y_required = False
-        self.X = None
-        self.y = None
+class Base(object):
+    X = None
+    y = None
+    y_required = False
 
     def fit(self, X, y=None):
         if not isinstance(X, np.ndarray):
@@ -41,4 +40,14 @@ class Base(object):
 
         self.y = y
 
+    def predict(self, X=None):
+        if self.X is not None:
+            return self._predict(X)
+        else:
+            raise ValueError('You must call `fit` before `predict`')
 
+    def _predict(self, X=None):
+        pass
+
+    def _train(self):
+        pass
